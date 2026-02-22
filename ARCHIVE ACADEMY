@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHIVE ACADEMY - শিক্ষার সোশ্যাল নেটওয়ার্ক</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        :root {
+            --primary-color: #1877f2;
+            --secondary-color: #42b72a;
+            --bg-color: #f0f2f5;
+            --white: #ffffff;
+            --dark-text: #1c1e21;
+            --light-text: #65676b;
+            --border-color: #dddfe2;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--dark-text);
+        }
+
+        /* নেভিগেশন বার */
+        .navbar {
+            background-color: var(--white);
+            padding: 8px 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-small {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+
+        .search-box {
+            flex: 0.4;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: none;
+            border-radius: 20px;
+            background-color: var(--bg-color);
+            font-size: 15px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            border-radius: 0;
+        }
+
+        .profile-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-pic-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            cursor: pointer;
+        }
+
+        /* মেইন কন্টেইনার */
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 70px auto 20px;
+            padding: 0 20px;
+        }
+
+        /* বাম সাইডবার */
+        .left-sidebar {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 70px;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .profile-card:hover {
+            background-color: var(--bg-color);
+        }
+
+        .profile-pic {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 4px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--dark-text);
+        }
+
+        .menu-item:hover {
+            background-color: var(--bg-color);
+        }
+
+        .menu-item i {
+            width: 24px;
+            color: var(--primary-color);
+        }
+
+        /* মিডল কন্টেন্ট */
+        .main-content {
+            background-color: transparent;
+        }
+
+        /* স্টোরি সেকশন */
+        .stories {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .story-card {
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+        }
+
+        .story-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-card span {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            color: white;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        /* পোস্ট ক্রিয়েটর */
+        .post-creator {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .creator-top {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .creator-top input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 12px 16px;
+            background-color: var(--bg-color);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .creator-top input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .creator-actions {
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--light-text);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--bg-color);
+        }
+
+        /* পোস্ট */
+        .post {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .post-info h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .post-info small {
+            color: var(--light-text);
+            font-size: 12px;
+        }
+
+        .post-content {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .post-content img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 8px;
+            color: var(--light-text);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            background: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--light-text);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .post-action-btn:hover {
+            background-color: var(--bg-color);
+        }
+
+        .post-action-btn.liked {
+            color: var(--primary-color);
+        }
+
+        /* কমেন্ট সেকশন */
+        .comments-section {
+            margin-top: 12px;
+            display: none;
+        }
+
+        .comments-section.show {
+            display: block;
+        }
+
+        .comment {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .comment-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+            background-color: var(--bg-color);
+            padding: 8px 12px;
+            border-radius: 18px;
+        }
+
+        .comment-content strong {
+            font-size: 13px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .comment-content p {
+            font-size: 14px;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 12px;
+            outline: none;
+        }
+
+        .comment-input button {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* ডান সাইডবার */
+        .right-sidebar {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 70px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--dark-text);
+        }
+
+        .course-card {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .course-thumb {
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+        }
+
+        .course-info h5 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .course-info small {
+            color: var(--light-text);
+            font-size: 12px;
+        }
+
+        .friend-request {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .confirm-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background-color: #e4e6eb;
+            color: var(--dark-text);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* মডাল */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        /* রেসপনসিভ */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 240px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .left-sidebar {
+                display: none;
+            }
+            .search-box {
+                display: none;
+            }
+            .stories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+    <!-- ফন্ট অসম için CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- নেভিগেশন বার -->
+    <nav class="navbar">
+        <div class="logo-area">
+            <div>
+                <div class="logo">ARCHIVE</div>
+                <div class="logo-small">ACADEMY</div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="কোর্স, শিক্ষক বা গ্রুপ খুঁজুন...">
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="showPage('home')">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="nav-item" onclick="showPage('friends')">
+                <i class="fas fa-user-friends"></i>
+            </div>
+            <div class="nav-item" onclick="showPage('courses')">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="nav-item" onclick="showPage('notifications')">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="nav-item" onclick="showPage('messages')">
+                <i class="fas fa-comment"></i>
+            </div>
+        </div>
+
+        <div class="profile-menu">
+            <div class="profile-pic-small" onclick="showProfile()"></div>
+        </div>
+    </nav>
+
+    <!-- মেইন কন্টেইনার -->
+    <div class="container">
+        <!-- বাম সাইডবার -->
+        <aside class="left-sidebar">
+            <div class="profile-card" onclick="showProfile()">
+                <div class="profile-pic"></div>
+                <div>
+                    <h4 id="userName">রহিম উদ্দিন</h4>
+                    <small id="userRole">শিক্ষার্থী</small>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="showFeed()">
+                <i class="fas fa-newspaper"></i>
+                <span>নিউজ ফিড</span>
+            </div>
+            <div class="menu-item" onclick="showMessenger()">
+                <i class="fas fa-comment-dots"></i>
+                <span>মেসেঞ্জার</span>
+            </div>
+            <div class="menu-item" onclick="showWatch()">
+                <i class="fas fa-play-circle"></i>
+                <span>ওয়াচ</span>
+            </div>
+            <div class="menu-item" onclick="showMarketplace()">
+                <i class="fas fa-store"></i>
+                <span>মার্কেটপ্লেস</span>
+            </div>
+            <div class="menu-item" onclick="showGroups()">
+                <i class="fas fa-users"></i>
+                <span>গ্রুপ</span>
+            </div>
+            <div class="menu-item" onclick="showSaved()">
+                <i class="fas fa-bookmark"></i>
+                <span>সংরক্ষিত</span>
+            </div>
+            <div class="menu-item" onclick="showEvents()">
+                <i class="fas fa-calendar"></i>
+                <span>ইভেন্ট</span>
+            </div>
+            <div class="menu-item" onclick="showCourses()">
+                <i class="fas fa-graduation-cap"></i>
+                <span>আমার কোর্স</span>
+            </div>
+        </aside>
+
+        <!-- মিডল কন্টেন্ট -->
+        <main class="main-content" id="mainContent">
+            <!-- স্টোরি সেকশন -->
+            <div class="stories">
+                <div class="story-card">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200" alt="Story">
+                    <span>প্রোগ্রামিং</span>
+                </div>
+                <div class="story-card">
+                    <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=200" alt="Story">
+                    <span>ডিজাইন</span>
+                </div>
+                <div class="story-card">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=200" alt="Story">
+                    <span>মার্কেটিং</span>
+                </div>
+                <div class="story-card">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=200" alt="Story">
+                    <span>এআই/এমএল</span>
+                </div>
+                <div class="story-card">
+                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=200" alt="Story">
+                    <span>ডাটা সায়েন্স</span>
+                </div>
+            </div>
+
+            <!-- পোস্ট ক্রিয়েটর -->
+            <div class="post-creator">
+                <div class="creator-top">
+                    <div class="profile-pic" style="width: 40px; height: 40px;"></div>
+                    <input type="text" id="postInput" placeholder="আপনার পড়াশোনার আপডেট শেয়ার করুন...">
+                </div>
+                <div class="creator-actions">
+                    <button class="action-btn" onclick="openLiveModal()">
+                        <i class="fas fa-video" style="color: #f02849;"></i>
+                        লাইভ
+                    </button>
+                    <button class="action-btn" onclick="openPhotoModal()">
+                        <i class="fas fa-images" style="color: #45bd62;"></i>
+                        ফটো/ভিডিও
+                    </button>
+                    <button class="action-btn" onclick="openFeelingModal()">
+                        <i class="fas fa-smile" style="color: #f7b928;"></i>
+                        অনুভূতি
+                    </button>
+                </div>
+            </div>
+
+            <!-- পোস্ট কন্টেইনার (ডায়নামিকভাবে লোড হবে) -->
+            <div id="postsContainer"></div>
+        </main>
+
+        <!-- ডান সাইডবার -->
+        <aside class="right-sidebar">
+            <h3 class="sidebar-title">ট্রেন্ডিং কোর্স</h3>
+            
+            <div class="course-card" onclick="enrollCourse(1)">
+                <div class="course-thumb"></div>
+                <div class="course-info">
+                    <h5>ওয়েব ডেভেলপমেন্ট</h5>
+                    <small>২,৫০০+ শিক্ষার্থী</small>
+                    <small>⭐ ৪.৮ (২৩৪ রিভিউ)</small>
+                </div>
+            </div>
+            
+            <div class="course-card" onclick="enrollCourse(2)">
+                <div class="course-thumb" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+                <div class="course-info">
+                    <h5>ডিজিটাল মার্কেটিং</h5>
+                    <small>১,৮০০+ শিক্ষার্থী</small>
+                    <small>⭐ ৪.৬ (১৫৬ রিভিউ)</small>
+                </div>
+            </div>
+            
+            <div class="course-card" onclick="enrollCourse(3)">
+                <div class="course-thumb" style="background: linear-gradient(135deg, #43e97b, #38f9d7);"></div>
+                <div class="course-info">
+                    <h5>গ্রাফিক ডিজাইন</h5>
+                    <small>১,২০০+ শিক্ষার্থী</small>
+                    <small>⭐ ৪.৭ (১৮৯ রিভিউ)</small>
+                </div>
+            </div>
+
+            <h3 class="sidebar-title" style="margin-top: 24px;">ফ্রেন্ড রিকোয়েস্ট</h3>
+            
+            <div class="friend-request" id="friendRequest1">
+                <div class="profile-pic" style="width: 40px; height: 40px;"></div>
+                <div>
+                    <h5>করিম হাসান</h5>
+                    <small>২ mutual friends</small>
+                </div>
+                <div class="request-actions">
+                    <button class="confirm-btn" onclick="acceptRequest(1)">✓</button>
+                    <button class="delete-btn" onclick="declineRequest(1)">✗</button>
+                </div>
+            </div>
+
+            <div class="friend-request" id="friendRequest2">
+                <div class="profile-pic" style="width: 40px; height: 40px; background: linear-gradient(45deg, #f093fb, #f5576c);"></div>
+                <div>
+                    <h5>নুসরাত জাহান</h5>
+                    <small>৫ mutual friends</small>
+                </div>
+                <div class="request-actions">
+                    <button class="confirm-btn" onclick="acceptRequest(2)">✓</button>
+                    <button class="delete-btn" onclick="declineRequest(2)">✗</button>
+                </div>
+            </div>
+
+            <h3 class="sidebar-title" style="margin-top: 24px;">আপকামিং ইভেন্ট</h3>
+            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 16px; border-radius: 12px;">
+                <p style="font-size: 14px;">🎯 আগামীকাল</p>
+                <p style="font-weight: bold;">ক্যারিয়ার ইন টেক</p>
+                <small>রাত ৮:০০ টা</small>
+                <button onclick="joinEvent()" style="margin-top: 12px; padding: 8px; background: white; color: #667eea; border: none; border-radius: 6px; width: 100%; cursor: pointer;">
+                    জয়েন করুন
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- লগইন মডাল -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h2>ARCHIVE ACADEMY তে লগইন করুন</h2>
+            <input type="email" id="loginEmail" placeholder="ইমেইল">
+            <input type="password" id="loginPassword" placeholder="পাসওয়ার্ড">
+            <button onclick="login()">লগইন</button>
+            <p style="text-align: center; margin-top: 16px;">
+                অ্যাকাউন্ট নেই? <a href="#" onclick="showRegister()">রেজিস্টার করুন</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- রেজিস্ট্রেশন মডাল -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('registerModal')">&times;</span>
+            <h2>নতুন অ্যাকাউন্ট খুলুন</h2>
+            <input type="text" id="regName" placeholder="আপনার নাম">
+            <input type="email" id="regEmail" placeholder="ইমেইল">
+            <input type="password" id="regPassword" placeholder="পাসওয়ার্ড">
+            <select id="regRole">
+                <option value="student">শিক্ষার্থী</option>
+                <option value="teacher">শিক্ষক</option>
+            </select>
+            <button onclick="register()">রেজিস্টার</button>
+        </div>
+    </div>
+
+    <!-- পোস্ট মডাল -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('postModal')">&times;</span>
+            <h2>নতুন পোস্ট তৈরি করুন</h2>
+            <textarea id="postContent" rows="4" placeholder="কী শিখলেন আজ?"></textarea>
+            <input type="file" id="postImage" accept="image/*">
+            <button onclick="createPost()">পোস্ট করুন</button>
+        </div>
+    </div>
+
+    <script>
+        // গ্লোবাল ভেরিয়েবল
+        let currentUser = null;
+        let posts = [];
+        let comments = {};
+
+        // অনুমোদিত ইউজার (ডেমো ডাটা)
+        const validUsers = [
+            { email: 'rahim@test.com', password: '123456', name: 'রহিম উদ্দিন', role: 'student' },
+            { email: 'karim@test.com', password: '123456', name: 'করিম হাসান', role: 'teacher' }
+        ];
+
+        // ডেমো পোস্ট
+        const demoPosts = [
+            {
+                id: 1,
+                userId: 1,
+                userName: 'ড. নাজমুল করিম',
+                userRole: 'প্রফেসর',
+                time: '২ ঘন্টা আগে',
+                content: '🚀 নতুন কোর্স শুরু হচ্ছে: "পাইথন দিয়ে ডাটা সায়েন্স"\n\nএই কোর্সে আপনি শিখবেন:\n• পাইথন প্রোগ্রামিং\n• ডাটা অ্যানালাইসিস\n• মেশিন লার্নিং বেসিকস\n• রিয়েল প্রজেক্ট',
+                image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400',
+                likes: 234,
+                comments: 45,
+                shares: 23,
+                liked: false,
+                showComments: false
+            },
+            {
+                id: 2,
+                userId: 2,
+                userName: 'ফারিহা ইসলাম',
+                userRole: 'শিক্ষার্থী',
+                time: '৫ ঘন্টা আগে',
+                content: '🎉 আমার প্রথম মেশিন লার্নিং প্রজেক্ট সফলভাবে সম্পন্ন করেছি!\n\n#ML #LearningJourney #ArchiveAcademy',
+                image: null,
+                likes: 89,
+                comments: 12,
+                shares: 5,
+                liked: false,
+                showComments: false
+            }
+        ];
+
+        // ডেমো কমেন্টস
+        const demoComments = {
+            1: [
+                { user: 'রহিম উদ্দিন', comment: 'দারুন! কবে থেকে শুরু হচ্ছে?' },
+                { user: 'সাদমান সাকিব', comment: 'আমি রেডি আছি!' }
+            ],
+            2: [
+                { user: 'তানজিনা আক্তার', comment: 'অভিনন্দন! কী কী শিখলেন?' }
+            ]
+        };
+
+        // পেজ লোড হওয়ার পর
+        window.onload = function() {
+            // চেক করি ইউজার লগইন করা আছে কিনা
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUIForLoggedInUser();
+            } else {
+                // লগইন মডাল দেখাই
+                document.getElementById('loginModal').classList.add('show');
+            }
+
+            // পোস্ট লোড করি
+            loadPosts();
+        };
+
+        // লগইন ফাংশন
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = validUsers.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                currentUser = {
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                closeModal('loginModal');
+                updateUIForLoggedInUser();
+                showNotification('সফলভাবে লগইন হয়েছে!', 'success');
+            } else {
+                showNotification('ভুল ইমেইল বা পাসওয়ার্ড!', 'error');
+            }
+        }
+
+        // রেজিস্ট্রেশন ফাংশন
+        function register() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+
+            if (name && email && password) {
+                currentUser = { name, email, role };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                closeModal('registerModal');
+                updateUIForLoggedInUser();
+                showNotification('রেজিস্ট্রেশন সফল হয়েছে!', 'success');
+                
+                // নতুন ইউজারকে ভ্যালিড ইউজারে যোগ করি
+                validUsers.push({ email, password, name, role });
+            } else {
+                showNotification('সব ফিল্ড পূরণ করুন!', 'error');
+            }
+        }
+
+        // ইউজার ইন্টারফেস আপডেট
+        function updateUIForLoggedInUser() {
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = 
+                currentUser.role === 'teacher' ? 'শিক্ষক' : 'শিক্ষার্থী';
+        }
+
+        // লগআউট
+        function logout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            location.reload();
+        }
+
+        // পোস্ট লোড
+        function loadPosts() {
+            posts = [...demoPosts];
+            renderPosts();
+        }
+
+        // পোস্ট রেন্ডার
+        function renderPosts() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                container.appendChild(postElement);
+            });
+        }
+
+        // পোস্ট এলিমেন্ট তৈরি
+        function createPostElement(post) {
+            const div = document.createElement('div');
+            div.className = 'post';
+            div.id = `post-${post.id}`;
+
+            let imageHtml = '';
+            if (post.image) {
+                imageHtml = `<img src="${post.image}" alt="Post image">`;
+            }
+
+            let commentsHtml = '';
+            if (demoComments[post.id]) {
+                commentsHtml = demoComments[post.id].map(c => `
+                    <div class="comment">
+                        <div class="comment-pic"></div>
+                        <div class="comment-content">
+                            <strong>${c.user}</strong>
+                            <p>${c.comment}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            div.innerHTML = `
+                <div class="post-header">
+                    <div class="profile-pic" style="width: 40px; height: 40px;"></div>
+                    <div class="post-info">
+                        <h4>${post.userName}</h4>
+                        <small>${post.userRole} • ${post.time}</small>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>${post.content.replace(/\n/g, '<br>')}</p>
+                    ${imageHtml}
+                </div>
+                <div class="post-stats">
+                    <span>❤️ ${post.likes}</span>
+                    <span>💬 ${post.comments}</span>
+                    <span>🔄 ${post.shares}</span>
+                </div>
+                <div class="post-actions">
+                    <button class="post-action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                        <i class="fas ${post.liked ? 'fa-heart' : 'fa-heart'}"></i> লাইক
+                    </button>
+                    <button class="post-action-btn" onclick="toggleComments(${post.id})">
+                        <i class="fas fa-comment"></i> কমেন্ট
+                    </button>
+                    <button class="post-action-btn" onclick="sharePost(${post.id})">
+                        <i class="fas fa-share"></i> শেয়ার
+                    </button>
+                </div>
+                <div class="comments-section" id="comments-${post.id}">
+                    ${commentsHtml}
+                    <div class="comment-input">
+                        <input type="text" id="comment-${post.id}" placeholder="কমেন্ট লিখুন...">
+                        <button onclick="addComment(${post.id})">পোস্ট</button>
+                    </div>
+                </div>
+            `;
+
+            return div;
+        }
+
+        // লাইক টগল
+        function toggleLike(postId) {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                renderPosts();
+                showNotification(post.liked ? 'পোস্ট লাইক করা হয়েছে!' : 'লাইক সরানো হয়েছে', 'success');
+            }
+        }
+
+        // কমেন্ট টগল
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection) {
+                commentsSection.classList.toggle('show');
+            }
+        }
+
+        // কমেন্ট যোগ
+        function addComment(postId) {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+
+            const commentInput = document.getElementById(`comment-${postId}`);
+            const comment = commentInput.value.trim();
+
+            if (comment) {
+                if (!demoComments[postId]) {
+                    demoComments[postId] = [];
+                }
+                
+                demoComments[postId].push({
+                    user: currentUser.name,
+                    comment: comment
+                });
+
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments++;
+                }
+
+                commentInput.value = '';
+                renderPosts();
+                showNotification('কমেন্ট পোস্ট করা হয়েছে!', 'success');
+            }
+        }
+
+        // নতুন পোস্ট তৈরি
+        function createPost() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+
+            const content = document.getElementById('postContent').value;
+            const imageFile = document.getElementById('postImage').files[0];
+
+            if (content || imageFile) {
+                const newPost = {
+                    id: posts.length + 1,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    userRole: currentUser.role === 'teacher' ? 'শিক্ষক' : 'শিক্ষার্থী',
+                    time: 'এখনই',
+                    content: content,
+                    image: imageFile ? URL.createObjectURL(imageFile) : null,
+                    likes: 0,
+                    comments: 0,
+                    shares: 0,
+                    liked: false,
+                    showComments: false
+                };
+
+                posts.unshift(newPost);
+                demoComments[newPost.id] = [];
+                closeModal('postModal');
+                renderPosts();
+                showNotification('পোস্ট তৈরি হয়েছে!', 'success');
+                
+                // ইনপুট ক্লিয়ার
+                document.getElementById('postContent').value = '';
+                document.getElementById('postImage').value = '';
+            }
+        }
+
+        // ফ্রেন্ড রিকোয়েস্ট একসেপ্ট
+        function acceptRequest(requestId) {
+            document.getElementById(`friendRequest${requestId}`).remove();
+            showNotification('ফ্রেন্ড রিকোয়েস্ট একসেপ্ট করা হয়েছে!', 'success');
+        }
+
+        // ফ্রেন্ড রিকোয়েস্ট ডিক্লাইন
+        function declineRequest(requestId) {
+            document.getElementById(`friendRequest${requestId}`).remove();
+            showNotification('ফ্রেন্ড রিকোয়েস্ট ডিক্লাইন করা হয়েছে', 'info');
+        }
+
+        // কোর্সে এনরোল
+        function enrollCourse(courseId) {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            showNotification('কোর্সে এনরোল করা হয়েছে!', 'success');
+        }
+
+        // ইভেন্ট জয়েন
+        function joinEvent() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            showNotification('ইভেন্টে জয়েন করেছেন!', 'success');
+        }
+
+        // শেয়ার পোস্ট
+        function sharePost(postId) {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.shares++;
+                showNotification('পোস্ট শেয়ার করা হয়েছে!', 'success');
+            }
+        }
+
+        // সার্চ ফাংশন
+        document.getElementById('searchInput')?.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // সার্চ লজিক ইমপ্লিমেন্ট করুন
+        });
+
+        // নোটিফিকেশন দেখান
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                background-color: ${type === 'success' ? '#42b72a' : type === 'error' ? '#f02849' : '#1877f2'};
+                color: white;
+                border-radius: 8px;
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // মডাল ওপেন/ক্লোজ ফাংশন
+        function openLiveModal() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            showNotification('লাইভ ফিচার শীঘ্রই আসছে!', 'info');
+        }
+
+        function openPhotoModal() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            document.getElementById('postModal').classList.add('show');
+        }
+
+        function openFeelingModal() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            showNotification('অনুভূতি শেয়ার ফিচার শীঘ্রই আসছে!', 'info');
+        }
+
+        function showRegister() {
+            closeModal('loginModal');
+            document.getElementById('registerModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // পেজ নেভিগেশন ফাংশন
+        function showPage(page) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+            
+            showNotification(`${page} পেজ শীঘ্রই আসছে!`, 'info');
+        }
+
+        function showProfile() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+                return;
+            }
+            showNotification('প্রোফাইল পেজ শীঘ্রই আসছে!', 'info');
+        }
+
+        function showFeed() {
+            // ইতিমধ্যেই ফিডে আছেন
+        }
+
+        function showMessenger() {
+            showNotification('মেসেঞ্জার শীঘ্রই আসছে!', 'info');
+        }
+
+        function showWatch() {
+            showNotification('ওয়াচ শীঘ্রই আসছে!', 'info');
+        }
+
+        function showMarketplace() {
+            showNotification('মার্কেটপ্লেস শীঘ্রই আসছে!', 'info');
+        }
+
+        function showGroups() {
+            showNotification('গ্রুপ শীঘ্রই আসছে!', 'info');
+        }
+
+        function showSaved() {
+            showNotification('সংরক্ষিত পোস্ট শীঘ্রই আসছে!', 'info');
+        }
+
+        function showEvents() {
+            showNotification('ইভেন্ট শীঘ্রই আসছে!', 'info');
+        }
+
+        function showCourses() {
+            showNotification('আমার কোর্স শীঘ্রই আসছে!', 'info');
+        }
+
+        // কী প্রেস হ্যান্ডলার
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.show').forEach(modal => {
+                    modal.classList.remove('show');
+                });
+            }
+        });
+
+        // পোস্ট ইনপুট ক্লিক
+        document.getElementById('postInput')?.addEventListener('click', function() {
+            if (!currentUser) {
+                showNotification('প্লিজ লগইন করুন!', 'error');
+            } else {
+                openPhotoModal();
+            }
+        });
+    </script>
+</body>
+</html>
